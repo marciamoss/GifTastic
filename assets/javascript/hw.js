@@ -1,5 +1,5 @@
 $(document).ready(function() {    
-    var topics=['parrot','duck','swan','turkey','pigeon','flamingo','eagle','peacock','seagulls','penguin','tweety','big bird'], 
+    var topics=['birds of paradise','duck','swan','turkey','pigeon','flamingo','eagle','peacock','seagulls','penguin','parrot','pelican','tweety','big bird'], 
     staticimg=[],gifimg=[],staticstatus=[{image:"",status:""}], currentid="",previd=[], pointer;
     
 

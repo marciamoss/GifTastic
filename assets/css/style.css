@@ -5,6 +5,11 @@
     border-color: rgb(243, 162, 162);
     float: left;
 }
+h1{
+    text-align: center;
+    background-color: rgb(243, 162, 162);
+    color:rgb(134, 132, 132);
+}
 body{
     background:
     radial-gradient(rgb(243, 162, 162) 3px, transparent 4px),
