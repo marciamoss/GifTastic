@@ -1,6 +1,6 @@
 $(document).ready(function() {    
     var topics=['birds of paradise','duck','swan','turkey','pigeon','flamingo','eagle','peacock','seagulls','penguin','parrot','pelican','tweety','big bird'], 
-    staticimg=[],gifimg=[],staticstatus=[{image:"",status:""}], currentid="",previd=[], pointer, loadClicks=[];
+    staticimg=[],gifimg=[],staticstatus=[{image:"",status:""}], currentid="",prevFavS=[],prevFavG=[], pointer, loadClicks=[];
 
     //load gifs and animate
     function getGifs(pointer,maxGif,numGif){   
@@ -40,6 +40,14 @@ $(document).ready(function() {
             $(".gif").append("<figure class='work'><img id=imgid"+j+" class='imgwidth' value="+j +" data-alt="+gifimg[j]+' alt= "0"'+
             'src='+staticimg[j]+">"+"<p class='imgtxt'>Rating: "+responsedata[j].rating+" <img class='mt-1 favimg' src='assets/images/heart.png'></p></figure>");
             $(".favs").html("<h2>Add Favorites</h2>");
+            
+            //load prev favs into current topic
+            if (prevFavS.length>0){
+                for(var k=0;k<prevFavS.length;k++){
+                    $(".favs").append("<div class='favgif'><img class='imgwidth' data-alt="+prevFavG[k]+' alt= "0"'+
+                    'src='+prevFavS[k]+"></div>");
+                }
+            }
         }
         
         //load 10 additional gifs
@@ -65,26 +73,11 @@ $(document).ready(function() {
         $('.favimg').on('click', function(event) {
             event.preventDefault();
             var j=parseInt($(this).parent().parent().children().attr("value"));
-
-            $(".favs").append("<figure class='favgif'><img class='imgwidth' value="+j +" data-alt="+gifimg[j]+' alt= "0"'+
-            'src='+staticimg[j]+"></figure>");
-            
-        });
-        //favs play and pause the gif
-        $(".favs").on('click','.favgif', function(event) {
-            event.preventDefault();
-            if($(pointer).attr("value")!="Load 10 more gifs"){
-                
-                staticstatus.image=parseInt($(this).children().attr('value'));
-                staticstatus.status=$(this).children().attr('alt');
-
-                if (staticstatus.status=="0"){
-                    $(this).children().attr({src: gifimg[staticstatus.image], 'data-alt': staticimg[staticstatus.image], alt: "1"});
-                }
-                else if (staticstatus.status=="1"){
-                    $(this).children().attr({src: staticimg[staticstatus.image], 'data-alt': gifimg[staticstatus.image], alt: "0"});
-                }
-            }
+            $(".favs").append("<div class='favgif'><img class='imgwidth mt-0' value="+j +" data-alt="+gifimg[j]+' alt= "0"'+
+            'src='+staticimg[j]+"></div>");
+            //load the favs into an array to be carried over from topic to topic
+            prevFavS.push(staticimg[j]);
+            prevFavG.push(gifimg[j]);
         });
         
         //play and pause the gif
@@ -100,8 +93,6 @@ $(document).ready(function() {
                 $(this).children("#imgid"+staticstatus.image).attr({src: staticimg[staticstatus.image], 'data-alt': gifimg[staticstatus.image], alt: "0"});
             }  
         });
-
-        previd=[];
     }
  
     //create all buttons
@@ -113,15 +104,14 @@ $(document).ready(function() {
         }
         var button = $('<input type="button" id='+abc+' class="btn btn-primary ml-1 mr-1 mb-1 mt-1 buttonCol" value='+abc+ '>');
         button.appendTo(".topics");
-    }   
-    
+    }     
     //grab the gifs
     function apicall(maxGif,numGif){    
         $(":button").on("click", function(event){
             $(".gif").empty();
             
             staticimg=[];gifimg=[];staticstatus=[{image:"",status:""}];
-            
+           
             //Adding new buttons///////
             if ($(this).attr("id")=='submit'){
                 event.preventDefault();
@@ -136,7 +126,6 @@ $(document).ready(function() {
                         }
                         var button = $('<input type="button" id='+abc+' class="btn btn-primary ml-1 mr-1 mb-1 mt-1 buttonCol" value='+abc+ '>');
                         button.appendTo(".topics");
-                        previd=[];
                         numOfPics=numGif;
 
                         $(":button").on("click", function(event){
@@ -158,8 +147,21 @@ $(document).ready(function() {
             }
         }); 
     }
-
     //currently the minimum gifs are set to 10 and max fetch limit from api is set to 400
     apicall(400,10);
+
+    //play and pause fav gif
+    $(".favs").on('click','.favgif', function(event) {
+        var favS=$(this).children().attr('src');
+        var status=$(this).children().attr('alt');
+        if (status=="0"){
+            var index = prevFavS.indexOf(favS);
+            $(this).children().attr({src: prevFavG[index], 'data-alt': prevFavS[index], alt: "1"});
+        }
+        if (status=="1"){
+            var index = prevFavG.indexOf(favS);
+            $(this).children().attr({src: prevFavS[index], 'data-alt': prevFavG[index], alt: "0"});
+        }
+    });
 });
     
