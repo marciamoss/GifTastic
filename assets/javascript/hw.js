@@ -102,7 +102,7 @@ $(document).ready(function() {
         }else{
             var abc=topics[i];
         }
-        var button = $('<input type="button" id='+abc+' class="btn btn-primary ml-1 mr-1 mb-1 mt-1 buttonCol" value='+abc+ '>');
+        var button = $('<input type="button" id='+abc+' class="btn btn-primary ml-1 mr-1 mb-1 mt-1 buttonCol" btnType="oldbutton" value='+abc+ '>');
         button.appendTo(".topics");
     }     
     //grab the gifs
@@ -124,16 +124,16 @@ $(document).ready(function() {
                         }else{
                             var abc=$("#topicsAdd").val();
                         }
-                        var button = $('<input type="button" id='+abc+' class="btn btn-primary ml-1 mr-1 mb-1 mt-1 buttonCol" value='+abc+ '>');
+                        var button = $('<input type="button" id='+abc+' class="btn btn-primary ml-1 mr-1 mb-1 mt-1 buttonCol" btnType="newbutton" value='+abc+ '>');
                         button.appendTo(".topics");
                         numOfPics=numGif;
 
                         $(":button").on("click", function(event){
                             event.preventDefault();
-                            if (($(this).attr("id") != 'submit') && ($(this).attr("id") != 'tenMoreGif')){
+                            if (($(this).attr("id") != 'submit') && ($(this).attr("id") != 'tenMoreGif')  && ($(this).attr("btnType")!="oldbutton")){
                                 $(".gif").empty();
                                 staticimg=[];gifimg=[];staticstatus=[{image:"",status:""}];
-                                pointer='<input type="button" id='+abc+' class="btn btn-primary ml-1 mr-1 mb-1 mt-1 buttonCol" value='+abc+ '>';
+                                pointer='<input type="button" id='+abc+' class="btn btn-primary ml-1 mr-1 mb-1 mt-1 buttonCol" btnType="newbutton" value='+abc+ '>';
                                 getGifs(pointer,maxGif,numGif);
                             }
                         });
